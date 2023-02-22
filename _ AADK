@@ -1,0 +1,149 @@
+/* [_] 
+
+coding a tactile game
+
+*/
+
+int dolor = 0;
+bool mood = true;
+int loopcounter = 0;
+int lasttres = 0; 
+
+void setup(){
+  Serial.begin(9600);
+}
+
+void loop(){
+Serial.println("");
+  //maybe do if any of them are active then DONT)
+Serial.println((dolor<10)?("?tocarme?"):("tocame suavemente"));
+loopcounter++;
+if ((loopcounter+1)%5==0) Serial.println("!aprietame!!"); //squeeze me
+if(dolor>15) Serial.println("calmarme"); //soothe me 
+               
+int trauma = analogRead(A0);
+int uno = analogRead(A2); 
+int dos1 = analogRead(A3);
+int dos2 = analogRead(A4);
+int tres = analogRead(A5);
+  
+  if(mood){
+
+if (trauma){
+    Serial.print("trauma es: ");
+    Serial.println(trauma);
+  
+    if ((dos1<200&&dos1>1)||(dos2<200&&dos1>1)){
+      //gatekeeper theory of pain
+      if (uno&&(tres<200&&tres)){
+        Serial.println("esta bien, bien, mmm si bueno me gustaaaah");
+        delay(1000);
+        Serial.println("si siii");
+        delay(2000);
+        Serial.println("si así, así, mas mas");
+        delay(1000);
+        dolor--; 
+        Serial.print("dolor = ");
+        Serial.println(dolor);
+      }
+      else {
+      Serial.println("oh tal vez esta bueno... ");
+      delay(1000);
+      Serial.println("tocame con otros al mismor tiempo, suavemente");
+      delay(1000);
+      }
+    }
+   	else {
+    Serial.println("no! eso me duele por dentro");
+    Serial.println("no! that hurts me inside");
+    mood=false;
+    dolor++;
+    Serial.print("dolor es = ");
+    Serial.println(dolor);
+    delay(10000);
+        Serial.println("lo siento, lo siento");
+    	delay(1000);
+    	Serial.println("sorry, sorry");
+    	delay(3000);
+  		Serial.println("me siento tierno ahora");
+    	delay(1000);
+    	Serial.println("i'm feeling tender now");
+    	delay(5000);
+    	Serial.println ("esperame, por favor");
+    	Serial.println("wait for me, please");
+    	delay(4000);
+        Serial.println("bueno...");
+      	delay(1000);
+   mood=true;
+    }
+}
+
+  if(uno){
+    Serial.print("uno es: "); //the arse?
+    Serial.println(uno);
+   Serial.println(uno>200?("jugando rudo siii"):("no hay necesidad de ser timidi aqui"));
+    if (tres) { Serial.println("s-s-sii");
+               Serial.println("estoy gusta asi");
+              }
+  delay(1000);
+  }
+     
+  
+  if (dos1||dos2){
+        Serial.print("dos1 es: ");
+    Serial.println(dos1);
+    Serial.print("dos2 es: ");
+    Serial.println(dos2);
+// lightly touching both dos is a fucking pleasure zone
+    if (dos1&&dos2<200){
+      Serial.println("hormigueos si sii me gusta");
+      if (tres&&tres<200){
+        Serial.println("ayudas a curar mis heridas");
+        dolor--;
+        Serial.println("dolor es: ");
+        Serial.println(dolor);
+    }
+    }
+	if(dos1&&dos2>200) mood=false;
+	delay(1000);
+    }
+         
+          
+  if (tres){
+    Serial.print("tres es: ");
+    Serial.println(tres);
+    Serial.print("lasttres es: ");
+    Serial.println(lasttres);
+ //happy with other positive input around (eg. if fibers are lightly pushed at the same time)
+    Serial.println(tres<200?("si sii me gusta mucho"):("noo no asi bebe"));
+    if ((lasttres/100)==(tres/100)) Serial.println("que aburrido, you touch me same last time");                                                 
+	lasttres=tres; 
+    delay(1000);
+          }
+
+  }
+  
+else {
+  if (dolor<10){
+  Serial.println("en realidad no tocame");
+  Serial.println("eso duele");
+  delay(5000);
+  mood = true; 
+  }
+ else {
+   //endless while loop of pain if paincounter>=20 && !mood
+    Serial.println("no!, eso es suficiente, no escuchas, no mas hoy");
+    Serial.println("no! that's enough, you don't listen, no more today");
+    delay(10000);
+    while (!mood){
+    	Serial.println("estoy lastimando");
+   		Serial.println("i'm hurting");
+      delay(10000);
+        Serial.println("me duele por dentro");
+   		Serial.println("i'm hurting inside");
+      	delay(10000);
+    }
+ }
+}
+delay(5000); 
+}
