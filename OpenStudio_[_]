@@ -1,0 +1,161 @@
+/* [_] 
+
+coding a tactile game
+
+TO DO 
+- adjust delays so more responsive and sensitive
+- adjust sensor positions, stich in location circle in white thread and add overflows
+
+
+*/
+
+int duele = 0;
+bool mood = true; //modo 
+int loopcounter = 0;
+int anterior = 0; 
+int botinc = 0;
+int verde = 2;
+
+void setup(){
+  Serial.begin(9600);
+  pinMode(verde, OUTPUT);
+}
+
+void loop(){
+digitalWrite(verde, HIGH);
+Serial.println("");
+  //maybe do if any of them are active then DONT)
+Serial.println((duele<5)?("?me tocas?"):("tocarme suavemente"));
+loopcounter++;
+if ((loopcounter+1)%5==0) Serial.println("tocame en la lamina y mira como respondo - cuidado con el nivel de dolor"); 
+if(duele>7) Serial.println("calmame"); 
+               
+int arriba = analogRead(A8); 
+int botin = analogRead(A6); 
+int doble1 = analogRead(A4); 
+int doble2 = analogRead(A2); 
+int muslos = analogRead(A0); 
+  
+  if(mood){
+
+if (arriba){
+    Serial.print("arriba ");
+    Serial.println(arriba);
+  
+    if (botin||(muslos<100&&muslos)){
+      //gatekeeper theory of pain 
+      if ((doble1<100&&doble1)||(doble2<100&&doble2)){
+        Serial.println("esta bien, bien, mmm asi bueno me gustaaaah");
+        delay(1000);
+        Serial.println("si siii");
+        delay(2000);
+        Serial.println("si así, así, mas mas");
+        delay(1000);
+        duele=0; 
+        Serial.print("duele ");
+        Serial.println(duele);
+      }
+      else {
+      Serial.println("oh asi esta bien... ");
+      duele--; 
+      Serial.print("duele ");
+      Serial.println(duele);
+      delay(1000);
+      Serial.println("pero tocame en otros citios a la vez, suavemente");
+      delay(1000);
+      }
+    }
+   	else {
+    Serial.println("no! eso me duele por dentro");
+    mood=false;
+    duele++;
+    delay(1000);
+      Serial.println("lo siento, lo siento");
+    	delay(2000);
+  		Serial.println("me siento tierno ahora");
+    	delay(3000);
+    	Serial.println ("esperame, por favor");
+    	delay(5000);
+      Serial.println("bueno...");
+      delay(1000);
+    }
+}
+
+  if(botin){
+    botinc++;
+    if (botinc<5) Serial.println("!has encontrado mi botin!");
+    Serial.print("botin "); 
+    Serial.println(botin);
+   Serial.println(botin>200?("jugando rudo siii"):("no te cortas"));
+    if (muslos<100) { 
+      Serial.println("s-s-sii");
+      Serial.println("me gusta asi");
+      duele--;
+      Serial.println("duele ");
+      Serial.println(duele);
+      }
+  delay(500);
+  }
+     
+  
+  if (doble1||doble2){
+    //if only one is touched say touch together?
+    Serial.print("doble1 es: ");
+    Serial.println(doble1);
+    Serial.print("doble2 es: ");
+    Serial.println(doble2);
+    if (doble1&&doble2<100){
+      Serial.println("hormigueos si sii me gusta");
+      if (muslos&&muslos<100){
+        Serial.println("mi ayudas a curar mis heridas");
+        duele--;
+        Serial.println("duele es: ");
+        Serial.println(duele);
+    }
+    if ((doble1&&doble2)>100) Serial.println("ooowwie");
+    }
+	if(doble1&&doble2>200) mood=false;
+	delay(500);
+    }
+         
+          
+  if (muslos){
+    Serial.print("muslos es: ");
+    Serial.println(muslos);
+ //happy with other positive input around (eg. if fibers are lightly pushed at the same time)
+    Serial.println(muslos<100?("si sii me gusta mucho"):("noo no asi bebe"));
+    if ((anterior/100)==(muslos/100)) Serial.println("que aburrido, ya me has tocado asi");                                                 
+	anterior=muslos; 
+    delay(500);
+          }
+
+  }
+  
+else {
+  Serial.print("duele "); 
+  Serial.println(duele);
+
+  if (duele<5){
+  duele++;
+  mood=true;
+  }
+  else if (duele<7){
+  Serial.println("mejor no me toques mal");
+  Serial.println("eso duele");
+  delay(10000);
+  mood = true; 
+  }
+ else {
+   //endless while loop of pain if paincounter>=8 && !mood
+    Serial.println("no!, eso es suficiente, no escuchas, no mas hoy");
+    delay(10000);
+    while (!mood){
+    	Serial.println("estoy lastimando");
+      delay(10000);
+        Serial.println("me duele por dentro");
+      	delay(10000);
+    }
+ }
+}
+delay(1000); 
+}
